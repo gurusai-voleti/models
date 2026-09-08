@@ -29,7 +29,7 @@ def copy(path: str) -> None:
   Args:
     path: path of the video in GCS bucket.
   """
-  gsutil_command = f"gsutil cp -r {path} ."
+  gsutil_command = f"gcloud storage cp --recursive {path} ."
   subprocess.run(gsutil_command, shell=True, check=True)
 
 
@@ -49,8 +49,9 @@ def move(file_path: str, destination_bucket_path: str) -> None:
       'gs://bucket-name/path/to/destination'.
   """
   if os.path.isdir(file_path):
+    # The '-r' flag for the 'mv' command is not supported in the migration guide.
     gsutil_command = f"gsutil -m mv -r {file_path} {destination_bucket_path}"
   else:
-    gsutil_command = f"gsutil mv {file_path} {destination_bucket_path}"
+    gsutil_command = f"gcloud storage mv {file_path} {destination_bucket_path}"
 
   subprocess.run(gsutil_command, shell=True, check=True)
